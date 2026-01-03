@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GlobeTrotter | Booking Canvas</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .booking-container {
+            max-width: 1000px;
+            margin: 100px auto;
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 40px;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .booking-form-card,
+        .summary-card {
+            background: var(--glass-white);
+            backdrop-filter: blur(30px);
+            border: 1px solid var(--glass-border);
+            border-radius: 32px;
+            padding: 40px;
+        }
+
+        .form-section {
+            margin-bottom: 30px;
+        }
+
+        .form-section h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .transport-options {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .transport-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .transport-card:hover,
+        .transport-card.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary-light);
+            transform: translateY(-5px);
+        }
+
+        .transport-card i {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .partner-apps {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .partner-logo {
+            flex: 1;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            text-align: center;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .summary-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 24px;
+            margin-bottom: 20px;
+        }
+
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            color: var(--text-soft);
+        }
+
+        .total-row {
+            border-top: 1px solid var(--glass-border);
+            padding-top: 20px;
+            margin-top: 20px;
+            font-size: 1.4rem;
+            font-weight: 700;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        /* Success Popup */
+        .transaction-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.9);
+            background: var(--sidebar-bg);
+            border: 1px solid var(--primary);
+            padding: 50px;
+            border-radius: 32px;
+            text-align: center;
+            z-index: 3000;
+            box-shadow: 0 50px 100px rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(20px);
+            opacity: 0;
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .transaction-popup.active {
+            display: block;
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .icon-check {
+            width: 80px;
+            height: 80px;
+            background: #10B981;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin: 0 auto 30px;
+        }
+
+        @media (max-width: 900px) {
+            .booking-container {
+                grid-template-columns: 1fr;
+                margin: 40px 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="hero-bg"></div>
+
+    <nav style="padding: 20px 5%; display: flex; align-items: center; gap: 20px;">
+        <a href="index.html" style="color: white; text-decoration: none; font-weight: 600;">
+            <i class="fas fa-arrow-left"></i> Back to Dashboard
+        </a>
+    </nav>
+
+    <div class="booking-container">
+        <!-- Form Section -->
+        <div class="booking-form-card">
+            <div class="form-section">
+                <h3><i class="fas fa-user-circle"></i> Traveler Details</h3>
+                <div class="form-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div>
+                        <label>Full Name</label>
+                        <input type="text" id="user-fullname" class="input-field" placeholder="e.g. John Doe">
+                    </div>
+                    <div>
+                        <label>Email Address</label>
+                        <input type="email" id="user-email" class="input-field" placeholder="john@example.com">
+                    </div>
+                </div>
+                <div class="form-group" style="margin-top: 20px;">
+                    <label>Phone Number</label>
+                    <input type="tel" id="user-phone" class="input-field" placeholder="+1 234 567 890">
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3><i class="fas fa-map-marker-alt"></i> Select Destination</h3>
+                <select id="destination-select" class="input-field"
+                    style="background: rgba(255,255,255,0.05); color: white;">
+                    <!-- Options populated by JS -->
+                </select>
+            </div>
+
+            <div class="form-section">
+                <h3><i class="fas fa-shuttle-van"></i> Transportation Mode</h3>
+                <div class="transport-options">
+                    <div class="transport-card" data-mode="Bus" data-charge="150">
+                        <i class="fas fa-bus"></i>
+                        <span>Bus</span>
+                        <div style="font-size: 0.8rem; margin-top: 5px;">+$150</div>
+                    </div>
+                    <div class="transport-card" data-mode="Train" data-charge="300">
+                        <i class="fas fa-train"></i>
+                        <span>Train</span>
+                        <div style="font-size: 0.8rem; margin-top: 5px;">+$300</div>
+                    </div>
+                    <div class="transport-card active" data-mode="Flight" data-charge="800">
+                        <i class="fas fa-plane"></i>
+                        <span>Flight</span>
+                        <div style="font-size: 0.8rem; margin-top: 5px;">+$800</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3><i class="fas fa-handshake"></i> Booking Partners</h3>
+                <div class="partner-apps">
+                    <div class="partner-logo">MakeMyTrip</div>
+                    <div class="partner-logo">RedBus</div>
+                    <div class="partner-logo">BookMyTrain</div>
+                    <div class="partner-logo">Expedia</div>
+                </div>
+            </div>
+
+            <button id="finalize-booking" class="btn-main" style="margin-top: 30px;">Confirm & Pay Now</button>
+        </div>
+
+        <!-- Summary Section -->
+        <div class="summary-card">
+            <img id="summary-img" src="../login/assets/map_hero.jpg" alt="Destination">
+            <h2 id="summary-dest" style="margin-bottom: 10px; font-family: 'Playfair Display', serif;">Destination</h2>
+            <p id="summary-date" style="color: var(--primary); font-weight: 700; margin-bottom: 30px;">Departure: June
+                20, 2026</p>
+
+            <div class="price-row">
+                <span>Base Fare</span>
+                <span id="base-price">$0</span>
+            </div>
+            <div class="price-row">
+                <span>Transport (Flight)</span>
+                <span id="transport-charge">$800</span>
+            </div>
+            <div class="price-row">
+                <span>Partner Fees</span>
+                <span>$45</span>
+            </div>
+            <div class="total-row">
+                <span>Total Amount</span>
+                <span id="total-price">$845</span>
+            </div>
+            <p style="font-size: 0.8rem; color: var(--text-soft); margin-top: 20px; text-align: center;">
+                Secured by GlobeTrotter Pay <i class="fas fa-shield-alt"></i>
+            </p>
+        </div>
+    </div>
+
+    <!-- Success Transaction Popup -->
+    <div id="success-popup" class="transaction-popup">
+        <div class="icon-check"><i class="fas fa-check"></i></div>
+        <h2 style="font-family: 'Playfair Display', serif; font-size: 2rem; margin-bottom: 15px;">Transaction
+            Successful!</h2>
+        <p style="color: var(--text-soft); line-height: 1.6; margin-bottom: 30px;">
+            Your journey to <strong id="pop-dest" style="color: white;">...</strong> is confirmed.
+            A confirmation message has been sent to your registered mobile number and email.
+        </p>
+        <div
+            style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 16px; margin-bottom: 30px; text-align: left;">
+            <div class="price-row"><span>Booking ID:</span> <span id="pop-id">GT-884920</span></div>
+            <div class="price-row"><span>Paid Via:</span> <span>Partner App</span></div>
+            <div class="price-row"><span>Total Charge:</span> <span id="pop-total">$0</span></div>
+        </div>
+        <button onclick="window.location.href='index.html'" class="btn-main">Back to Dashboard</button>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const destSelect = document.getElementById('destination-select');
+            const summaryDest = document.getElementById('summary-dest');
+            const summaryImg = document.getElementById('summary-img');
+            const basePriceEl = document.getElementById('base-price');
+            const transportChargeEl = document.getElementById('transport-charge');
+            const totalPriceEl = document.getElementById('total-price');
+            const transportCards = document.querySelectorAll('.transport-card');
+
+            const destinations = [
+                { title: 'Swiss Alps', price: 2400, img: '../login/assets/features_collab.png' },
+                { title: 'Paris, France', price: 1800, img: '../login/assets/paris.png' },
+                { title: 'Tokyo, Japan', price: 3100, img: '../login/assets/features_itinerary.png' },
+                { title: 'Bali, Indonesia', price: 1500, img: '../login/assets/bali.png' },
+                { title: 'Santorini, Greece', price: 2200, img: '../login/assets/santorini.png' },
+                { title: 'New York, USA', price: 2800, img: '../login/assets/newyork.png' },
+                { title: 'London, UK', price: 1950, img: '../login/assets/london.png' },
+                { title: 'Rome, Italy', price: 2100, img: '../login/assets/rome.png' },
+                { title: 'Sydney, Australia', price: 3400, img: '../login/assets/sydney.png' },
+                { title: 'Dubai, UAE', price: 2700, img: '../login/assets/dubai.png' },
+                { title: 'Cairo, Egypt', price: 1400, img: '../login/assets/cairo.png' },
+                { title: 'Cape Town, SA', price: 2300, img: '../login/assets/features_collab.png' },
+                { title: 'Machu Picchu, Peru', price: 2600, img: '../login/assets/machupicchu.png' },
+                { title: 'Banff, Canada', price: 1900, img: '../login/assets/banff.png' },
+                { title: 'Bora Bora', price: 4200, img: '../login/assets/borabora.png' }
+            ];
+
+            // Populate Dropdown
+            destinations.forEach(d => {
+                const opt = document.createElement('option');
+                opt.value = d.title;
+                opt.innerText = d.title;
+                destSelect.appendChild(opt);
+            });
+
+            // URL Params Handling
+            const urlParams = new URLSearchParams(window.location.search);
+            const preDest = urlParams.get('dest');
+            if (preDest) destSelect.value = preDest;
+
+            function updateSummary() {
+                const selected = destinations.find(d => d.title === destSelect.value);
+                const activeTransport = document.querySelector('.transport-card.active');
+                const tCharge = parseInt(activeTransport.dataset.charge);
+                const tName = activeTransport.dataset.mode;
+
+                summaryDest.innerText = selected.title;
+                summaryImg.src = selected.img;
+                basePriceEl.innerText = `$${selected.price}`;
+                transportChargeEl.innerText = `$${tCharge} (${tName})`;
+
+                const total = selected.price + tCharge + 45;
+                totalPriceEl.innerText = `$${total}`;
+            }
+
+            destSelect.addEventListener('change', updateSummary);
+
+            transportCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    transportCards.forEach(c => c.classList.remove('active'));
+                    card.classList.add('active');
+                    updateSummary();
+                });
+            });
+
+            // Finalize
+            document.getElementById('finalize-booking').addEventListener('click', () => {
+                const name = document.getElementById('user-fullname').value;
+                if (!name) { alert('Please enter your full name'); return; }
+
+                // Show success popup
+                document.getElementById('pop-dest').innerText = destSelect.value;
+                document.getElementById('pop-total').innerText = totalPriceEl.innerText;
+                document.getElementById('pop-id').innerText = 'GT-' + Math.floor(Math.random() * 900000 + 100000);
+                document.getElementById('success-popup').classList.add('active');
+
+                // Save to History
+                const selected = destinations.find(d => d.title === destSelect.value);
+                const activeTransport = document.querySelector('.transport-card.active');
+                const tName = activeTransport.dataset.mode;
+                const totalCharge = parseInt(totalPriceEl.innerText.replace('$', ''));
+
+                const journeyData = {
+                    title: selected.title,
+                    img: selected.img,
+                    date: 'June 20, 2026',
+                    appliedAt: new Date().toLocaleDateString(),
+                    transport: tName,
+                    totalCharge: totalCharge
+                };
+
+                let history = JSON.parse(localStorage.getItem('journeyHistory')) || [];
+                history.unshift(journeyData);
+                localStorage.setItem('journeyHistory', JSON.stringify(history));
+            });
+
+            updateSummary();
+        });
+    </script>
+</body>
+
+</html>
