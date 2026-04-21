@@ -1,196 +1,621 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GlobeTrotter | Admin Dashboard</title>
-    <link rel="stylesheet" href="../shared/base.css">
+    <title>GlobeTrotter | Plan Your Next Journey</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        .stats-overview {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 25px;
+        :root {
+            --primary: #F5A623;
+            --primary-light: #FFD700;
+            --bg-dark: #0F172A;
+            --text-pure: #FFFFFF;
+            --text-soft: rgba(255, 255, 255, 0.7);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-pure);
+            overflow-x: hidden;
+        }
+
+        /* Background */
+        .landing-bg {
+            position: fixed;
+            inset: 0;
+            z-index: -2;
+            background: url('assets/golden_bg.png') center/cover no-repeat;
+            opacity: 0.85;
+            animation: breathe 20s infinite alternate ease-in-out;
+        }
+
+        .landing-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.85) 0%, rgba(15, 23, 42, 0.4) 100%);
+            /* Blur removed as requested */
+        }
+
+        @keyframes breathe {
+            from { transform: scale(1); }
+            to { transform: scale(1.05); }
+        }
+
+        /* Navbar */
+        nav {
+            padding: 20px 80px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            position: fixed;
+            top: 0;
+            z-index: 100;
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, #F5A623, #FFD700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 40px;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-pure);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-light);
+        }
+
+        .btn-login {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            padding: 10px 30px;
+            border-radius: 50px;
+            color: #1E293B !important;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(245, 166, 35, 0.3);
+        }
+
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(245, 166, 35, 0.5);
+        }
+
+        /* Main Content Container */
+        .main-container {
+            display: flex;
+            min-height: 100vh;
+            padding: 140px 80px 60px;
+            align-items: center;
+            justify-content: space-between;
+            gap: 60px;
+            animation: fadeInBody 1s ease-out forwards;
+        }
+
+        @keyframes fadeInBody {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Left Section */
+        .left-content {
+            flex: 1;
+            max-width: 650px;
+        }
+
+        .left-content h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 4.8rem;
+            line-height: 1.1;
+            margin-bottom: 25px;
+            background: linear-gradient(180deg, #FFFFFF 0%, #F5A623 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -1px;
+            text-shadow: 0 10px 30px rgba(245, 166, 35, 0.2);
+        }
+
+        .left-content p {
+            font-size: 1.05rem;
+            color: var(--text-soft);
+            line-height: 1.7;
             margin-bottom: 40px;
+            max-width: 550px;
         }
 
-        .admin-card {
-            padding: 25px;
+        /* Destination Cards */
+        .dest-cards {
+            display: flex;
+            gap: 20px;
         }
 
-        .chart-placeholder {
-            height: 300px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px dashed var(--glass-border);
-            border-radius: 20px;
+        .dest-card {
+            width: 140px;
+            height: 180px;
+            border-radius: 16px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .dest-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 45px rgba(0,0,0,0.6);
+            border-color: rgba(255,255,255,0.3);
+        }
+
+        .dest-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+
+        .dest-card:hover img {
+            transform: scale(1.1);
+        }
+
+        .dest-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 15px 10px;
+            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+            text-align: center;
+        }
+
+        .dest-info span {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: white;
+            letter-spacing: 0.5px;
+        }
+
+        /* Right Section - Login Panel */
+        .right-content {
+            width: 440px;
+            perspective: 1000px;
+        }
+
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.4);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 24px;
+            padding: 45px 40px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+            transform: rotateY(-5deg) rotateX(2deg);
+            transition: transform 0.5s ease;
+        }
+
+        .glass-panel:hover {
+            transform: rotateY(0deg) rotateX(0deg);
+        }
+
+        .glass-panel::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+        }
+
+        .panel-header {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .panel-header h2 {
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .panel-header p {
+            font-size: 0.9rem;
+            color: var(--text-soft);
+        }
+
+        /* Tabs */
+        .auth-tabs {
+            display: flex;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 6px;
+            margin-bottom: 30px;
+        }
+
+        .auth-tab {
+            flex: 1;
+            text-align: center;
+            padding: 12px 0;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            color: var(--text-soft);
+        }
+
+        .auth-tab.active {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: #1E293B;
+            box-shadow: 0 4px 15px rgba(245, 166, 35, 0.4);
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 22px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.8rem;
+            color: var(--text-soft);
+            margin-bottom: 8px;
+            margin-left: 5px;
+            font-weight: 600;
+        }
+
+        .form-input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 14px 20px;
+            border-radius: 12px;
+            color: white;
+            font-size: 0.95rem;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .form-input::placeholder {
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        .form-input:focus {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 4px rgba(255, 107, 53, 0.1);
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #F5A623 0%, #FFD700 100%);
+            color: #1E293B;
+            border: none;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 5px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 20px rgba(245, 166, 35, 0.2);
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 25px rgba(245, 166, 35, 0.4);
+            filter: brightness(1.05);
+        }
+
+        /* Social Login */
+        .social-login {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .social-btn {
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-top: 20px;
+            color: white;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .social-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-3px);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Landing Page Features Section */
+        .features-section {
+            padding: 100px 80px;
+            background: linear-gradient(180deg, transparent 0%, #0B1120 100%);
+            border-top: 1px solid rgba(255,255,255,0.05);
             position: relative;
-            overflow: hidden;
         }
 
-        .data-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
         }
 
-        .data-table th {
-            text-align: left;
-            color: var(--primary);
-            padding: 15px;
-            border-bottom: 1px solid var(--glass-border);
+        .section-title h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            margin-bottom: 15px;
         }
 
-        .data-table td {
-            padding: 15px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+        .section-title p {
+            color: var(--text-soft);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
         }
 
-        .status-badge {
-            padding: 5px 12px;
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+        }
+
+        .feature-box {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.08);
+            padding: 40px;
             border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 700;
+            transition: 0.4s;
+            backdrop-filter: blur(10px);
         }
 
-        .status-active {
-            background: rgba(16, 185, 129, 0.2);
-            color: #10B981;
+        .feature-box:hover {
+            transform: translateY(-10px);
+            background: rgba(255,255,255,0.05);
+            border-color: var(--primary);
         }
 
-        .status-pending {
-            background: rgba(245, 158, 11, 0.2);
-            color: #F59E0B;
+        .feature-box i {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 20px;
         }
 
-        /* Bar Chart Mockup */
-        .bar-container {
+        .feature-box h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+
+        .feature-box p {
+            color: var(--text-soft);
+            line-height: 1.6;
+        }
+
+        /* Footer */
+        footer {
+            background: #0B1120;
+            padding: 60px 80px;
+            border-top: 1px solid rgba(255,255,255,0.05);
             display: flex;
-            align-items: flex-end;
-            gap: 15px;
-            height: 150px;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
         }
 
-        .bar {
-            width: 30px;
-            background: var(--primary);
-            border-radius: 8px 8px 0 0;
-            transition: 0.5s;
+        .footer-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .footer-links {
+            display: flex; gap: 30px;
+        }
+
+        .footer-links a {
+            color: var(--text-soft);
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+
+        @media (max-width: 1024px) {
+            .main-container {
+                flex-direction: column;
+                padding: 140px 40px 40px;
+                gap: 50px;
+            }
+            .left-content {
+                text-align: center;
+                max-width: 100%;
+            }
+            .left-content h1 {
+                font-size: 4rem;
+            }
+            .left-content p {
+                margin: 0 auto 40px auto;
+            }
+            .dest-cards {
+                justify-content: center;
+            }
+            .right-content {
+                width: 100%;
+                max-width: 440px;
+                perspective: none;
+            }
+            .glass-panel {
+                transform: none;
+            }
+            .features-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav { padding: 20px; }
+            .nav-links { display: none; }
+            .main-container { padding-top: 120px; }
+            .left-content h1 { font-size: 3rem; }
+            .glass-panel { padding: 35px 25px; }
+            .features-section { padding: 80px 20px; }
+            .features-grid { grid-template-columns: 1fr; }
+            footer { flex-direction: column; gap: 20px; text-align: center; }
         }
     </style>
 </head>
-
 <body>
-    <div class="hero-bg"></div>
 
-    <aside class="sidebar">
-        <div class="logo">GlobeTrotter</div>
-        <nav style="flex: 1;">
-            <ul style="list-style: none;">
-                <li style="margin-bottom: 15px;"><a href="../02-dashboard/index.html"
-                        style="color: var(--text-soft); text-decoration: none; display: flex; align-items: center; gap: 15px; padding: 12px 20px;"><i
-                            class="fas fa-th-large"></i> Dashboard</a></li>
-                <li style="margin-bottom: 15px;"><a href="#" class="nav-link active"
-                        style="color: white; text-decoration: none; display: flex; align-items: center; gap: 15px; padding: 12px 20px; background: rgba(255,255,255,0.05); border-radius: 12px;"><i
-                            class="fas fa-chart-line"></i> Analytics</a></li>
-                <li style="margin-bottom: 15px;"><a href="#"
-                        style="color: var(--text-soft); text-decoration: none; display: flex; align-items: center; gap: 15px; padding: 12px 20px;"><i
-                            class="fas fa-users"></i> Users</a></li>
-            </ul>
-        </nav>
-        <div style="padding: 20px; background: rgba(255,107,53,0.1); border-radius: 16px; font-size: 0.8rem;">
-            <p style="font-weight: 700;">System Status</p>
-            <p style="color: #10B981;">● All Systems Operational</p>
-        </div>
-    </aside>
+    <div class="landing-bg"></div>
+    <div class="landing-overlay"></div>
 
-    <main class="main-content">
-        <header style="margin-bottom: 40px; display: flex; justify-content: space-between; align-items: center;">
-            <div>
-                <h1 style="font-family: 'Playfair Display', serif; font-size: 2.5rem;">Insights Hub</h1>
-                <p style="color: var(--text-soft);">Platform overview and user engagement metrics.</p>
-            </div>
-            <button class="btn-main"><i class="fas fa-download"></i> Export Report</button>
-        </header>
+    <nav>
+        <a href="#" class="logo">GlobeTrotter</a>
+        <ul class="nav-links">
+            <li><a href="#features">Features</a></li>
+            <li><a href="#">Discover</a></li>
+            <li><a href="#">Community</a></li>
+            <li><a href="dashboard.html" class="btn-login">Login</a></li>
+        </ul>
+    </nav>
 
-        <div class="stats-overview animate-up">
-            <div class="glass-card admin-card">
-                <p style="color: var(--text-soft); font-size: 0.8rem; text-transform: uppercase;">Total Trips</p>
-                <h2 style="font-size: 2rem; margin-top: 10px;">12,842</h2>
-                <span style="color: #10B981; font-size: 0.8rem;">+14% this month</span>
-            </div>
-            <div class="glass-card admin-card">
-                <p style="color: var(--text-soft); font-size: 0.8rem; text-transform: uppercase;">Active Users</p>
-                <h2 style="font-size: 2rem; margin-top: 10px;">4,210</h2>
-                <span style="color: #10B981; font-size: 0.8rem;">+8.2% since yesterday</span>
-            </div>
-            <div class="glass-card admin-card">
-                <p style="color: var(--text-soft); font-size: 0.8rem; text-transform: uppercase;">Top Destination</p>
-                <h2 style="font-size: 2rem; margin-top: 10px;">Paris</h2>
-                <span style="color: var(--primary); font-size: 0.8rem;">2.4k itineraries</span>
-            </div>
-            <div class="glass-card admin-card">
-                <p style="color: var(--text-soft); font-size: 0.8rem; text-transform: uppercase;">Avg. Budget</p>
-                <h2 style="font-size: 2rem; margin-top: 10px;">$3,450</h2>
-                <span style="color: var(--text-soft); font-size: 0.8rem;">Across all users</span>
-            </div>
-        </div>
-
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px;" class="animate-up">
-            <div class="glass-card">
-                <h3>User Growth</h3>
-                <div class="chart-placeholder">
-                    <div class="bar-container">
-                        <div class="bar" style="height: 40%;"></div>
-                        <div class="bar" style="height: 60%;"></div>
-                        <div class="bar" style="height: 45%;"></div>
-                        <div class="bar" style="height: 80%;"></div>
-                        <div class="bar" style="height: 95%;"></div>
-                        <div class="bar" style="height: 70%;"></div>
-                        <div class="bar" style="height: 85%;"></div>
+    <!-- Hero Section -->
+    <div class="main-container">
+        <!-- Left Section -->
+        <div class="left-content">
+            <h1>Global Routes<br>Simplified.</h1>
+            <p>Experience the next generation of travel planning. GlobeTrotter uses intelligent data to map your entire journey across continents in a single, beautiful interface.</p>
+            
+            <div class="dest-cards">
+                <div class="dest-card">
+                    <img src="assets/bali_card.png" alt="Bali, Indonesia">
+                    <div class="dest-info">
+                        <span>Bali, Indonesia</span>
+                    </div>
+                </div>
+                <div class="dest-card">
+                    <img src="assets/paris_card.png" alt="Paris, France">
+                    <div class="dest-info">
+                        <span>Paris, France</span>
                     </div>
                 </div>
             </div>
-            <div class="glass-card">
-                <h3>Recent Activity</h3>
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th>User</th>
-                            <th>Action</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Alex Rivera</td>
-                            <td>Created Paris Trip</td>
-                            <td><span class="status-badge status-active">Done</span></td>
-                        </tr>
-                        <tr>
-                            <td>Sarah Chen</td>
-                            <td>Shared Itinerary</td>
-                            <td><span class="status-badge status-active">Done</span></td>
-                        </tr>
-                        <tr>
-                            <td>Mark Wilson</td>
-                            <td>Joined Platform</td>
-                            <td><span class="status-badge status-pending">New</span></td>
-                        </tr>
-                        <tr>
-                            <td>Elena Popa</td>
-                            <td>Booked Flight</td>
-                            <td><span class="status-badge status-active">Done</span></td>
-                        </tr>
-                    </tbody>
-                </table>
+        </div>
+
+        <!-- Right Section: Login Panel -->
+        <div class="right-content">
+            <div class="glass-panel">
+                <div class="panel-header">
+                    <h2>Welcome Back</h2>
+                    <p>Start your next journey today.</p>
+                </div>
+
+                <div class="auth-tabs">
+                    <div class="auth-tab active">Sponsor Login</div>
+                    <div class="auth-tab">Join the Club</div>
+                </div>
+
+                <form action="dashboard.html" method="GET">
+                    <div class="form-group">
+                        <label>Explorer Email</label>
+                        <input type="email" class="form-input" placeholder="adventurer@globetrotter.com" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Secret Key</label>
+                        <input type="password" class="form-input" placeholder="••••••••••••" required>
+                    </div>
+
+                    <button type="submit" class="btn-submit">Access Dashboard</button>
+                </form>
+
+                <div class="social-login">
+                    <a href="#" class="social-btn"><i class="fab fa-google"></i></a>
+                    <a href="#" class="social-btn"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="social-btn"><i class="fab fa-apple"></i></a>
+                </div>
             </div>
         </div>
-    </main>
-</body>
+    </div>
 
+    <!-- Features Section -->
+    <section class="features-section" id="features">
+        <div class="section-title">
+            <h2>Why Choose GlobeTrotter</h2>
+            <p>We combine cutting-edge technology with premium travel expertise to deliver unforgettable journeys seamlessly.</p>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-box">
+                <i class="fas fa-route"></i>
+                <h3>Smart Routing</h3>
+                <p>Our intelligent algorithms find the most scenic and efficient paths for your multi-stop global adventures, saving you time and money.</p>
+            </div>
+            <div class="feature-box">
+                <i class="fas fa-gem"></i>
+                <h3>Premium Stays</h3>
+                <p>Gain exclusive access to the world's most luxurious and highly-rated accommodations, hand-picked for the ultimate comfort.</p>
+            </div>
+            <div class="feature-box">
+                <i class="fas fa-shield-alt"></i>
+                <h3>Secure Booking</h3>
+                <p>Enjoy peace of mind with our military-grade encryption and 24/7 priority customer support throughout your entire journey.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-logo">GlobeTrotter</div>
+        <div class="footer-links">
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Service</a>
+            <a href="#">Contact Support</a>
+        </div>
+    </footer>
+
+</body>
 </html>

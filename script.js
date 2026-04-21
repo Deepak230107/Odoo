@@ -20,21 +20,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Expanded Destinations Sample Data (15 places)
     const destinations = [
-        { id: 1, title: 'Swiss Alps', price: '$2,400', img: '../login/assets/features_collab.png', desc: 'Experience the breathtaking beauty of the Swiss Alps.' },
-        { id: 2, title: 'Paris, France', price: '$1,800', img: '../login/assets/paris.png', desc: 'The city of lights, romance, and world-class art.' },
-        { id: 3, title: 'Tokyo, Japan', price: '$3,100', img: '../login/assets/features_itinerary.png', desc: 'Futuristic skyscrapers meet traditional temples.' },
-        { id: 4, title: 'Bali, Indonesia', price: '$1,500', img: '../login/assets/bali.png', desc: 'Serene beaches and lush tropical landscapes.' },
-        { id: 5, title: 'Santorini, Greece', price: '$2,200', img: '../login/assets/santorini.png', desc: 'Iconic blue-domed churches and stunning sunsets.' },
-        { id: 6, title: 'New York, USA', price: '$2,800', img: '../login/assets/newyork.png', desc: 'The concrete jungle where dreams are made of.' },
-        { id: 7, title: 'London, UK', price: '$1,950', img: '../login/assets/london.png', desc: 'History, culture, and the majestic Big Ben.' },
-        { id: 8, title: 'Rome, Italy', price: '$2,100', img: '../login/assets/rome.png', desc: 'The eternal city with ancient wonders like the Colosseum.' },
-        { id: 9, title: 'Sydney, Australia', price: '$3,400', img: '../login/assets/sydney.png', desc: 'Opera House and beautiful harbor life.' },
-        { id: 10, title: 'Dubai, UAE', price: '$2,700', img: '../login/assets/dubai.png', desc: 'Luxury shopping and ultra-modern architecture.' },
-        { id: 11, title: 'Cairo, Egypt', price: '$1,400', img: '../login/assets/cairo.png', desc: 'Ancient pyramids and mysterious sphinxes.' },
-        { id: 12, title: 'Cape Town, SA', price: '$2,300', img: '../login/assets/features_collab.png', desc: 'Table Mountain and stunning coastal drives.' },
-        { id: 13, title: 'Machu Picchu, Peru', price: '$2,600', img: '../login/assets/machupicchu.png', desc: 'The lost city of the Incas high in the Andes.' },
-        { id: 14, title: 'Banff, Canada', price: '$1,900', img: '../login/assets/banff.png', desc: 'Turquoise lakes and rugged mountain peaks.' },
-        { id: 15, title: 'Bora Bora', price: '$4,200', img: '../login/assets/borabora.png', desc: 'Overwater bungalows and crystal clear lagoons.' }
+        { id: 1, title: 'Swiss Alps', price: '$2,400', img: 'assets/model.png', desc: 'Experience the breathtaking beauty of the Swiss Alps.' },
+        { id: 2, title: 'Paris, France', price: '$1,800', img: 'assets/model.png', desc: 'The city of lights, romance, and world-class art.' },
+        { id: 3, title: 'Tokyo, Japan', price: '$3,100', img: 'assets/model.png', desc: 'Futuristic skyscrapers meet traditional temples.' },
+        { id: 4, title: 'Bali, Indonesia', price: '$1,500', img: 'assets/model.png', desc: 'Serene beaches and lush tropical landscapes.' },
+        { id: 5, title: 'Santorini, Greece', price: '$2,200', img: 'assets/model.png', desc: 'Iconic blue-domed churches and stunning sunsets.' },
+        { id: 6, title: 'New York, USA', price: '$2,800', img: 'assets/model.png', desc: 'The concrete jungle where dreams are made of.' },
+        { id: 7, title: 'London, UK', price: '$1,950', img: 'assets/model.png', desc: 'History, culture, and the majestic Big Ben.' },
+        { id: 8, title: 'Rome, Italy', price: '$2,100', img: 'assets/model.png', desc: 'The eternal city with ancient wonders like the Colosseum.' },
+        { id: 9, title: 'Sydney, Australia', price: '$3,400', img: 'assets/model.png', desc: 'Opera House and beautiful harbor life.' },
+        { id: 10, title: 'Dubai, UAE', price: '$2,700', img: 'assets/model.png', desc: 'Luxury shopping and ultra-modern architecture.' },
+        { id: 11, title: 'Cairo, Egypt', price: '$1,400', img: 'assets/model.png', desc: 'Ancient pyramids and mysterious sphinxes.' },
+        { id: 12, title: 'Cape Town, SA', price: '$2,300', img: 'assets/model.png', desc: 'Table Mountain and stunning coastal drives.' },
+        { id: 13, title: 'Machu Picchu, Peru', price: '$2,600', img: 'assets/model.png', desc: 'The lost city of the Incas high in the Andes.' },
+        { id: 14, title: 'Banff, Canada', price: '$1,900', img: 'assets/model.png', desc: 'Turquoise lakes and rugged mountain peaks.' },
+        { id: 15, title: 'Bora Bora', price: '$4,200', img: 'assets/model.png', desc: 'Overwater bungalows and crystal clear lagoons.' }
     ];
 
     let selectedTrip = null;
