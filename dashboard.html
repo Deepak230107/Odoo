@@ -5,83 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GlobeTrotter | Admin Dashboard</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="CSS/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        .stats-overview {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 25px;
-            margin-bottom: 40px;
-        }
-
-        .admin-card {
-            padding: 25px;
-        }
-
-        .chart-placeholder {
-            height: 300px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px dashed var(--glass-border);
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-top: 20px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .data-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-
-        .data-table th {
-            text-align: left;
-            color: var(--primary);
-            padding: 15px;
-            border-bottom: 1px solid var(--glass-border);
-        }
-
-        .data-table td {
-            padding: 15px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
-        }
-
-        .status-badge {
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 700;
-        }
-
-        .status-active {
-            background: rgba(16, 185, 129, 0.2);
-            color: #10B981;
-        }
-
-        .status-pending {
-            background: rgba(245, 158, 11, 0.2);
-            color: #F59E0B;
-        }
-
-        /* Bar Chart Mockup */
-        .bar-container {
-            display: flex;
-            align-items: flex-end;
-            gap: 15px;
-            height: 150px;
-        }
-
-        .bar {
-            width: 30px;
-            background: var(--primary);
-            border-radius: 8px 8px 0 0;
-            transition: 0.5s;
-        }
-    </style>
+    <link rel="stylesheet" href="CSS/dashboard.css">
 </head>
 
 <body>
@@ -117,7 +43,7 @@
             <div style="display: flex; align-items: center; gap: 20px;">
                 <button class="btn-main"><i class="fas fa-download"></i> Export Report</button>
                 <div style="display: flex; align-items: center; gap: 10px;">
-                    <img src="assets/model.png" alt="Admin Profile" style="width: 48px; height: 48px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary);">
+                    <img src="assets/model.png" alt="Admin Profile" class="avatar-model" style="width: 48px; height: 48px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary);">
                 </div>
             </div>
         </header>
@@ -135,7 +61,7 @@
             </div>
             <div class="glass-card admin-card">
                 <p style="color: var(--text-soft); font-size: 0.8rem; text-transform: uppercase;">Top Destination</p>
-                <h2 style="font-size: 2rem; margin-top: 10px;">Paris</h2>
+                <h2 style="font-size: 2rem; margin-top: 10px;">India</h2>
                 <span style="color: var(--primary); font-size: 0.8rem;">2.4k itineraries</span>
             </div>
             <div class="glass-card admin-card">
@@ -173,7 +99,7 @@
                     <tbody>
                         <tr>
                             <td>Alex Rivera</td>
-                            <td>Created Paris Trip</td>
+                            <td>Created India Trip</td>
                             <td><span class="status-badge status-active">Done</span></td>
                         </tr>
                         <tr>
@@ -195,7 +121,95 @@
                 </table>
             </div>
         </div>
+
+        <div style="margin-top: 40px;" class="animate-up">
+            <div class="glass-card" style="padding: 0; overflow: hidden; border-radius: 20px; position: relative;">
+                <div style="padding: 20px 25px; border-bottom: 1px solid rgba(255,255,255,0.05); background: linear-gradient(180deg, rgba(15,23,42,0.9) 0%, rgba(15,23,42,0) 100%); position: absolute; top: 0; width: 100%; box-sizing: border-box; z-index: 10; pointer-events: none;">
+                    <h3 style="margin: 0; display: flex; align-items: center; gap: 10px; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">
+                        <i class="fas fa-globe-americas" style="color: var(--primary);"></i> Live Global Tracking
+                    </h3>
+                </div>
+
+                <!-- Travel Checking System Overlay -->
+                <div class="pro-floating" style="position: absolute; top: 80px; left: 25px; background: rgba(15,23,42,0.85); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.1); padding: 25px; border-radius: 16px; width: 340px; z-index: 20; box-shadow: 0 15px 35px rgba(0,0,0,0.5);">
+                    <h3 style="margin-top: 0; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; font-size: 1.2rem;">
+                        <i class="fas fa-route" style="color: var(--primary);"></i> Travel Checking System
+                    </h3>
+                    
+                    <div style="margin-bottom: 15px;">
+                        <label style="display: block; font-size: 0.8rem; color: var(--text-soft); margin-bottom: 5px;">Starting Point</label>
+                        <div style="display: flex; align-items: center; background: rgba(255,255,255,0.05); padding: 12px 15px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); transition: border-color 0.3s;">
+                            <i class="fas fa-location-dot" style="color: var(--text-soft); margin-right: 12px;"></i>
+                            <input type="text" id="origin-input" placeholder="Enter origin..." style="background: transparent; border: none; color: white; width: 100%; outline: none; font-family: 'Outfit', sans-serif;" value="Mumbai, India">
+                        </div>
+                    </div>
+                    
+                    <div style="margin-bottom: 20px;">
+                        <label style="display: block; font-size: 0.8rem; color: var(--text-soft); margin-bottom: 5px;">Destination Details</label>
+                        <div style="display: grid; grid-template-columns: 1fr; gap: 8px;">
+                            <div style="display: flex; align-items: center; background: rgba(255,255,255,0.05); padding: 8px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); transition: border-color 0.3s;">
+                                <i class="fas fa-globe" style="color: var(--primary); margin-right: 10px; font-size: 0.8rem;"></i>
+                                <div class="custom-dropdown" id="dropdown-country">
+                                    <button type="button" class="custom-dropdown-btn" onclick="toggleDropdown('menu-country')">
+                                        <span id="text-country">Select Country</span>
+                                        <i class="fas fa-chevron-down" style="font-size: 0.7rem; color: var(--text-soft);"></i>
+                                    </button>
+                                    <div class="custom-dropdown-menu" id="menu-country"></div>
+                                    <input type="hidden" id="dest-country" value="">
+                                </div>
+                            </div>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                                <div style="display: flex; align-items: center; background: rgba(255,255,255,0.05); padding: 8px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); transition: border-color 0.3s;">
+                                    <i class="fas fa-map" style="color: var(--primary); margin-right: 10px; font-size: 0.8rem;"></i>
+                                    <div class="custom-dropdown" id="dropdown-state">
+                                        <button type="button" class="custom-dropdown-btn" onclick="toggleDropdown('menu-state')">
+                                            <span id="text-state">Select State</span>
+                                            <i class="fas fa-chevron-down" style="font-size: 0.7rem; color: var(--text-soft);"></i>
+                                        </button>
+                                        <div class="custom-dropdown-menu" id="menu-state"></div>
+                                        <input type="hidden" id="dest-state" value="">
+                                    </div>
+                                </div>
+                                <div style="display: flex; align-items: center; background: rgba(255,255,255,0.05); padding: 8px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); transition: border-color 0.3s;">
+                                    <i class="fas fa-map-pin" style="color: var(--primary); margin-right: 10px; font-size: 0.8rem;"></i>
+                                    <div class="custom-dropdown" id="dropdown-district">
+                                        <button type="button" class="custom-dropdown-btn" onclick="toggleDropdown('menu-district')">
+                                            <span id="text-district">Select District</span>
+                                            <i class="fas fa-chevron-down" style="font-size: 0.7rem; color: var(--text-soft);"></i>
+                                        </button>
+                                        <div class="custom-dropdown-menu" id="menu-district"></div>
+                                        <input type="hidden" id="dest-district" value="">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px;">
+                        <div>
+                            <label style="display: block; font-size: 0.8rem; color: var(--text-soft); margin-bottom: 5px;">Date</label>
+                            <div style="background: rgba(255,255,255,0.05); padding: 12px 15px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1);">
+                                <input type="date" style="background: transparent; border: none; color: white; width: 100%; outline: none; font-family: 'Outfit', sans-serif; color-scheme: dark;">
+                            </div>
+                        </div>
+                        <div>
+                            <label style="display: block; font-size: 0.8rem; color: var(--text-soft); margin-bottom: 5px;">Travelers</label>
+                            <div style="background: rgba(255,255,255,0.05); padding: 12px 15px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center;">
+                                <i class="fas fa-user" style="color: var(--text-soft); margin-right: 8px;"></i>
+                                <input type="number" min="1" value="1" style="background: transparent; border: none; color: white; width: 100%; outline: none; font-family: 'Outfit', sans-serif;">
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="btn-main" onclick="goToBooking()" style="width: 100%; justify-content: center; padding: 14px; font-size: 1rem; display: flex; gap: 10px; align-items: center;"><i class="fas fa-calendar-check"></i> Book Slot</button>
+                </div>
+                <!-- Google Map with CSS filter for dark mode look -->
+                <iframe id="location-map" src="https://maps.google.com/maps?q=India&t=&z=5&ie=UTF8&iwloc=&output=embed" width="100%" style="border:0; display: block; height: 75vh; min-height: 600px; filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%);" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+        </div>
     </main>
+
+    <script src="JS/dashboard.js"></script>
 </body>
 
 </html>
